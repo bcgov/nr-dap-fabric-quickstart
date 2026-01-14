@@ -120,7 +120,7 @@ The `schemas/` folder contains SQL scripts for schema creation. **These scripts 
 - Column-level security (CLS) and row-level security (RLS) can be implemented
 - SQL-based schema management is preferred
 
-For this Lakehouse QuickStart, schemas are created manually in the Lakehouse UI (see [SETUP.md](SETUP.md) Step 3).
+For this Lakehouse QuickStart, schemas are created manually in the Lakehouse UI (see [SETUP.md](SETUP.md) Step 2).
 
 ## Getting Started
 
@@ -129,29 +129,62 @@ For this Lakehouse QuickStart, schemas are created manually in the Lakehouse UI 
 - Permissions to create Lakehouses and Pipelines
 - Basic understanding of PySpark and SQL
 
-**👉 See [SETUP.md](SETUP.md) for complete step-by-step setup instructions**
+### Installation Steps
 
-The setup process uses Git integration to quickly deploy all QuickStart files to your Fabric workspace, then guides you through creating schemas, importing notebooks, and running the medallion pipeline.
+**👉 See [SETUP.md](SETUP.md) for detailed instructions**
+
+**Note**: This QuickStart uses Lakehouse only. Schemas must be created manually in the Lakehouse UI before running notebooks. The SQL scripts in `schemas/` folder are provided for future Warehouse-based implementations.
 
 ## Extending the QuickStart
 
-The QuickStart is designed to be easily extended with additional data sources using the parameterized `source` variable.
+### Adding New Data Sources
 
-### Common Source System Patterns
+The QuickStart uses a parameterized `source` variable to support multiple data systems simultaneously.
 
-| Source | Use Case | Example Systems |
-|--------|----------|-----------------|
-| `erp` | Enterprise Resource Planning | SAP, Oracle ERP, Dynamics 365 |
-| `crm` | Customer Relationship Mgmt | Salesforce, Dynamics CRM, HubSpot |
-| `mkt` | Marketing Platforms | Marketo, HubSpot, Adobe Campaign |
-| `hr` | Human Resources | Workday, ADP, BambooHR |
-| `iot` | IoT/Sensor Data | Azure IoT Hub, AWS IoT |
-| `pos` | Point of Sale | Square, Toast, Shopify |
-| `fin` | Financial Systems | NetSuite, QuickBooks, Xero |
+#### Understanding Source Parameters
 
-Each source maintains isolated schemas (`{source}_replication` and `{source}_reporting`) for clear data lineage.
+**What is ERP?** In this context, **ERP** stands for **Enterprise Resource Planning** systems (SAP, Oracle ERP, Microsoft Dynamics) - used as the default example source.
 
-**For detailed instructions on adding new sources**, see [SETUP.md - Testing Different Sources](SETUP.md#testing-different-sources)
+The `source` parameter controls schema routing throughout the medallion architecture:
+- `source = 'erp'` → writes to `erp_replication` (Bronze) and `erp_reporting` (Silver/Gold)
+- `source = 'crm'` → writes to `crm_replication` (Bronze) and `crm_reporting` (Silver/Gold)
+
+#### Common Source System Patterns
+
+| Source | Use Case | Example Systems | Schemas Created |
+|--------|----------|-----------------|-----------------|
+| `erp` | Enterprise Resource Planning | SAP, Oracle ERP, Dynamics 365 F&O | `erp_replication`, `erp_reporting` |
+| `crm` | Customer Relationship Mgmt | Salesforce, Dynamics CRM, HubSpot | `crm_replication`, `crm_reporting` |
+| `mkt` | Marketing Platforms | Marketo, HubSpot, Adobe Campaign | `mkt_replication`, `mkt_reporting` |
+| `hr` | Human Resources | Workday, ADP, BambooHR | `hr_replication`, `hr_reporting` |
+| `iot` | IoT/Sensor Data | Azure IoT Hub, AWS IoT | `iot_replication`, `iot_reporting` |
+| `pos` | Point of Sale | Square, Toast, Shopify POS | `pos_replication`, `pos_reporting` |
+| `fin` | Financial Systems | NetSuite, QuickBooks, Xero | `fin_replication`, `fin_reporting` |
+
+#### Steps to Add a New Source
+
+1. **Create source-specific schemas in Lakehouse UI**:
+   - Open your Lakehouse
+   - Right-click on **Schemas** → **New schema**
+   - Create `crm_replication` and `crm_reporting` schemas
+
+2. **Use a copy template** from `templates/`:
+   - Oracle: `copy_oracle.json`
+   - PostgreSQL: `copy_postgresql.json`
+   - S3: `copy_s3.json`
+   - REST API: `copy_api.json`
+   - Dataverse: `copy_dataverse.json`
+
+3. **Update Bronze notebook** to read from new source (or create source-specific notebook)
+
+4. **Run pipeline** with `source` parameter set to new source name (e.g., `crm`)
+
+**Result**: All data flows through the same medallion pattern with clear source isolation:
+```
+erp_replication → erp_reporting (ERP data flow)
+crm_replication → crm_reporting (CRM data flow)
+mkt_replication → mkt_reporting (Marketing data flow)
+```
 
 ## Best Practices
 
@@ -183,19 +216,35 @@ Each source maintains isolated schemas (`{source}_replication` and `{source}_rep
 
 ## Common Use Cases
 
-The QuickStart templates support various data integration scenarios:
+### 1. ERP Integration (Oracle/SAP)
+Use `templates/copy_oracle.json` + incremental loading by `LAST_UPDATE_DATE`
 
-- **ERP Integration**: Oracle, SAP, Microsoft Dynamics
-- **CRM Replication**: Salesforce, Dynamics 365, Dataverse
-- **Cloud Storage**: S3, Azure Data Lake Storage
-- **API Integration**: REST APIs, public data sources
-- **IoT/Streaming**: Event Hub, Kafka integration patterns
+### 2. CRM Replication (Dataverse/Salesforce)
+Use `templates/copy_dataverse.json` or API template for Salesforce
 
-See `templates/` folder for Copy activity reference configurations.
+### 3. Cloud Data Lake (S3/ADLS)
+Use `templates/copy_s3.json` with file pattern matching
+
+### 4. IoT/Streaming Data
+Extend Bronze notebooks to use Event Hub or Kafka sources
+
+### 5. SaaS Application Data
+Use `templates/copy_api.json` with pagination support
+
+## Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| Schema not found | Create schemas manually in Lakehouse UI (right-click Schemas → New schema) |
+| File not found | Upload `samples/customers.csv` to Lakehouse Files |
+| Parameter not recognized | Verify notebooks attached to correct Lakehouse |
+| DQ checks fail | Review Silver data quality, check for nulls/duplicates |
+| Pipeline failure | Check notebook execution logs for detailed errors |
+
+For detailed troubleshooting, see [SETUP.md](SETUP.md#troubleshooting).
 
 ## Support & Resources
 
-- **[SETUP.md](SETUP.md)** - Complete setup guide with troubleshooting
 - **Microsoft Fabric Documentation**: https://learn.microsoft.com/fabric/
 - **Delta Lake Guide**: https://delta.io/
 - **Fabric Community**: https://community.fabric.microsoft.com/
