@@ -17,29 +17,44 @@ This QuickStart implements a medallion lakehouse architecture with three zones:
 
 ## Step-by-Step Setup
 
-### Step 1: Create Fabric Items
+### Step 1: Git QuickStart - Import Files to Workspace
 
-1. **Create a Lakehouse**
-   - Navigate to your Fabric workspace
-   - Click **+ New** → **Lakehouse**
-   - Name it: `lh_sales_core`
-   - Click **Create**
+Use this workflow to connect your Fabric workspace to GitHub and import the QuickStart files.
 
-### Step 2: Upload Sample Data
+1. **Create a new empty Fabric workspace** (or use an existing one)
 
-1. **Navigate to your Lakehouse** (`lh_sales_core`)
-2. Click on **Files** in the left navigation
-3. Create a folder structure:
-   - Right-click in Files area → **New folder** → Name it `raw`
-4. **Upload the sample CSV**:
-   - Click on the `raw` folder
-   - Click **Upload** → **Upload files**
-   - Select `samples/customers.csv` from this QuickStart package
-   - Confirm upload completes successfully
+2. **Connect the workspace to GitHub**:
+   - Create personal access token on GitHub: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic
+   - Navigate to **Workspace settings → Git integration**
+   - Provider: **GitHub**
+   - Repository: `bcgov/nr-dap-azure`
+   - Branch: `fabric-lakehouse-medallion-quickstart`
 
-**Verify**: You should see the file at path `Files/raw/customers.csv` in your Lakehouse
+3. **Initial sync**:
+   - Choose **Git → Workspace** (your workspace is empty)
+   - This imports the bootstrap notebook
 
-### Step 3: Create Database Schemas in Lakehouse
+4. **Disconnect Git** (recommended):
+   - Go to **Workspace settings → Git integration → Disconnect**
+   - This prevents accidental commits back to the repo
+   - Your workspace items remain intact and ready to use
+
+5. **Run the bootstrap notebook**:
+   - Open `bootstrap/01_import_files_root`
+   - Click **Run all**
+   - The notebook will:
+     - Create and attach Lakehouse `lh_sales_core`
+     - Copy all QuickStart files from the branch root to **Lakehouse → Files → `quickstart`**
+     - This includes notebooks, sample data, templates, and documentation
+
+
+**Verify**: 
+- Lakehouse `lh_sales_core` exists in your workspace
+- Files are visible under **Lakehouse → Files → quickstart** folder
+
+**Note**: If your organization restricts outbound traffic, allow `api.github.com` and `raw.githubusercontent.com` for the one-time import.
+
+### Step 2: Create Database Schemas in Lakehouse
 
 Schemas must be created in your Lakehouse before running notebooks. Create them manually using the Lakehouse UI:
 
@@ -57,7 +72,7 @@ Schemas must be created in your Lakehouse before running notebooks. Create them 
 - Schemas are **NOT** automatically created by `.saveAsTable()` - they must exist before notebooks run
 - All schemas must be created manually through the Lakehouse UI before running any notebooks
 
-### Step 4: Upload Notebooks
+### Step 3: Upload Notebooks
 
 1. **Navigate to your workspace** (not inside the Lakehouse)
 2. Click **+ New** → **Notebook**
@@ -83,7 +98,7 @@ Schemas must be created in your Lakehouse before running notebooks. Create them 
 
 **Note**: The notebooks are parameterized with a `source` parameter (default: 'erp'). When running from the pipeline, this parameter will be passed automatically.
 
-### Step 5: Manual Testing (Run Notebooks Individually)
+### Step 4: Manual Testing (Run Notebooks Individually)
 
 Before setting up the pipeline, test each notebook manually:
 
@@ -119,7 +134,7 @@ Before setting up the pipeline, test each notebook manually:
 
 **Important - Bronze Append Behavior**: Bronze uses append mode, so running the Bronze notebook multiple times will duplicate data (e.g., running manually then via pipeline will result in 12 rows instead of 6). This is expected behavior for an append-only audit trail. Silver handles deduplication, so you'll still see only 6 unique records in the curated table.
 
-### Step 6: Create the Pipeline (Optional - for Orchestration)
+### Step 5: Create the Pipeline (Optional - for Orchestration)
 
 1. **Navigate to your workspace**
 2. Click **+ New** → **Data pipeline**
@@ -163,7 +178,7 @@ Before setting up the pipeline, test each notebook manually:
 5. **Save the pipeline**
 6. Click **Run** to test the full orchestration
 
-### Step 7: Verify Results
+### Step 6: Verify Results
 
 After the pipeline completes (or after manual runs):
 

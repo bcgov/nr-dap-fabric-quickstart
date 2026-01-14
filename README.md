@@ -129,104 +129,29 @@ For this Lakehouse QuickStart, schemas are created manually in the Lakehouse UI 
 - Permissions to create Lakehouses and Pipelines
 - Basic understanding of PySpark and SQL
 
-### Installation Steps
+**👉 See [SETUP.md](SETUP.md) for complete step-by-step setup instructions**
 
-**👉 See [SETUP.md](SETUP.md) for detailed instructions**
-
-Quick summary:
-1. Create Lakehouse: `lh_sales_core`
-2. Upload `samples/customers.csv` to Lakehouse Files
-3. Create schemas manually in Lakehouse UI (right-click Schemas → New schema)
-4. Import notebooks from `notebooks/` and `dq/`
-5. Run notebooks in sequence: Bronze → Silver → Gold → DQ Checks
-6. (Optional) Create orchestration pipeline
-
-**Note**: This QuickStart uses Lakehouse only. Schemas must be created manually in the Lakehouse UI before running notebooks. The SQL scripts in `schemas/` folder are provided for future Warehouse-based implementations.
-
-### Testing the QuickStart
-
-```python
-# 1. Run Bronze - ingest raw data
-# Notebook: notebooks/bronze.py
-# Output: erp_replication.customers_raw
-
-# 2. Run Silver - cleanse and conform
-# Notebook: notebooks/silver.py
-# Output: erp_reporting.customers_curated
-
-# 3. Run Gold - create business marts
-# Notebook: notebooks/gold.py
-# Output: erp_reporting.customer_country_ageband_mart
-
-# 4. Run DQ Checks - validate data quality
-# Notebook: dq/dq_checks.py
-# Output: Validation results
-```
-
-### Verifying Results
-
-```sql
--- Check Bronze (raw data with ingest timestamp)
-SELECT * FROM erp_replication.customers_raw;
-
--- Check Silver (cleaned and typed data)
-SELECT * FROM erp_reporting.customers_curated;
-
--- Check Gold (aggregated metrics)
-SELECT * FROM erp_reporting.customer_country_ageband_mart
-ORDER BY country, age_band;
-```
+The setup process uses Git integration to quickly deploy all QuickStart files to your Fabric workspace, then guides you through creating schemas, importing notebooks, and running the medallion pipeline.
 
 ## Extending the QuickStart
 
-### Adding New Data Sources
+The QuickStart is designed to be easily extended with additional data sources using the parameterized `source` variable.
 
-The QuickStart uses a parameterized `source` variable to support multiple data systems simultaneously.
+### Common Source System Patterns
 
-#### Understanding Source Parameters
+| Source | Use Case | Example Systems |
+|--------|----------|-----------------|
+| `erp` | Enterprise Resource Planning | SAP, Oracle ERP, Dynamics 365 |
+| `crm` | Customer Relationship Mgmt | Salesforce, Dynamics CRM, HubSpot |
+| `mkt` | Marketing Platforms | Marketo, HubSpot, Adobe Campaign |
+| `hr` | Human Resources | Workday, ADP, BambooHR |
+| `iot` | IoT/Sensor Data | Azure IoT Hub, AWS IoT |
+| `pos` | Point of Sale | Square, Toast, Shopify |
+| `fin` | Financial Systems | NetSuite, QuickBooks, Xero |
 
-**What is ERP?** In this context, **ERP** stands for **Enterprise Resource Planning** systems (SAP, Oracle ERP, Microsoft Dynamics) - used as the default example source.
+Each source maintains isolated schemas (`{source}_replication` and `{source}_reporting`) for clear data lineage.
 
-The `source` parameter controls schema routing throughout the medallion architecture:
-- `source = 'erp'` → writes to `erp_replication` (Bronze) and `erp_reporting` (Silver/Gold)
-- `source = 'crm'` → writes to `crm_replication` (Bronze) and `crm_reporting` (Silver/Gold)
-
-#### Common Source System Patterns
-
-| Source | Use Case | Example Systems | Schemas Created |
-|--------|----------|-----------------|-----------------|
-| `erp` | Enterprise Resource Planning | SAP, Oracle ERP, Dynamics 365 F&O | `erp_replication`, `erp_reporting` |
-| `crm` | Customer Relationship Mgmt | Salesforce, Dynamics CRM, HubSpot | `crm_replication`, `crm_reporting` |
-| `mkt` | Marketing Platforms | Marketo, HubSpot, Adobe Campaign | `mkt_replication`, `mkt_reporting` |
-| `hr` | Human Resources | Workday, ADP, BambooHR | `hr_replication`, `hr_reporting` |
-| `iot` | IoT/Sensor Data | Azure IoT Hub, AWS IoT | `iot_replication`, `iot_reporting` |
-| `pos` | Point of Sale | Square, Toast, Shopify POS | `pos_replication`, `pos_reporting` |
-| `fin` | Financial Systems | NetSuite, QuickBooks, Xero | `fin_replication`, `fin_reporting` |
-
-#### Steps to Add a New Source
-
-1. **Create source-specific schemas in Lakehouse UI**:
-   - Open your Lakehouse
-   - Right-click on **Schemas** → **New schema**
-   - Create `crm_replication` and `crm_reporting` schemas
-
-2. **Use a copy template** from `templates/`:
-   - Oracle: `copy_oracle.json`
-   - PostgreSQL: `copy_postgresql.json`
-   - S3: `copy_s3.json`
-   - REST API: `copy_api.json`
-   - Dataverse: `copy_dataverse.json`
-
-3. **Update Bronze notebook** to read from new source (or create source-specific notebook)
-
-4. **Run pipeline** with `source` parameter set to new source name (e.g., `crm`)
-
-**Result**: All data flows through the same medallion pattern with clear source isolation:
-```
-erp_replication → erp_reporting (ERP data flow)
-crm_replication → crm_reporting (CRM data flow)
-mkt_replication → mkt_reporting (Marketing data flow)
-```
+**For detailed instructions on adding new sources**, see [SETUP.md - Testing Different Sources](SETUP.md#testing-different-sources)
 
 ## Best Practices
 
@@ -258,35 +183,19 @@ mkt_replication → mkt_reporting (Marketing data flow)
 
 ## Common Use Cases
 
-### 1. ERP Integration (Oracle/SAP)
-Use `templates/copy_oracle.json` + incremental loading by `LAST_UPDATE_DATE`
+The QuickStart templates support various data integration scenarios:
 
-### 2. CRM Replication (Dataverse/Salesforce)
-Use `templates/copy_dataverse.json` or API template for Salesforce
+- **ERP Integration**: Oracle, SAP, Microsoft Dynamics
+- **CRM Replication**: Salesforce, Dynamics 365, Dataverse
+- **Cloud Storage**: S3, Azure Data Lake Storage
+- **API Integration**: REST APIs, public data sources
+- **IoT/Streaming**: Event Hub, Kafka integration patterns
 
-### 3. Cloud Data Lake (S3/ADLS)
-Use `templates/copy_s3.json` with file pattern matching
-
-### 4. IoT/Streaming Data
-Extend Bronze notebooks to use Event Hub or Kafka sources
-
-### 5. SaaS Application Data
-Use `templates/copy_api.json` with pagination support
-
-## Troubleshooting
-
-| Issue | Solution |
-|-------|----------|
-| Schema not found | Create schemas manually in Lakehouse UI (right-click Schemas → New schema) |
-| File not found | Upload `samples/customers.csv` to Lakehouse Files |
-| Parameter not recognized | Verify notebooks attached to correct Lakehouse |
-| DQ checks fail | Review Silver data quality, check for nulls/duplicates |
-| Pipeline failure | Check notebook execution logs for detailed errors |
-
-For detailed troubleshooting, see [SETUP.md](SETUP.md#troubleshooting).
+See `templates/` folder for Copy activity reference configurations.
 
 ## Support & Resources
 
+- **[SETUP.md](SETUP.md)** - Complete setup guide with troubleshooting
 - **Microsoft Fabric Documentation**: https://learn.microsoft.com/fabric/
 - **Delta Lake Guide**: https://delta.io/
 - **Fabric Community**: https://community.fabric.microsoft.com/
