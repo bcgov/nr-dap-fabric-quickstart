@@ -34,18 +34,18 @@ Use this workflow to connect your Fabric workspace to GitHub and import the Quic
    - Choose **Git → Workspace** (your workspace is empty)
    - This imports the bootstrap notebook
 
-4. **Disconnect Git** (recommended):
-   - Go to **Workspace settings → Git integration → Disconnect**
-   - This prevents accidental commits back to the repo
-   - Your workspace items remain intact and ready to use
-
-5. **Run the bootstrap notebook**:
+4. **Run the bootstrap notebook**:
    - Open `bootstrap/01_import_files_root`
    - Click **Run all**
    - The notebook will:
      - Create and attach Lakehouse `lh_sales_core`
      - Copy all QuickStart files from the branch root to **Lakehouse → Files → `quickstart`**
      - This includes notebooks, sample data, templates, and documentation
+
+5. **Disconnect Git** (recommended):
+   - Go to **Workspace settings → Git integration → Disconnect**
+   - This prevents accidental commits back to the repo
+   - Your workspace items remain intact and ready to use
 
 
 **Verify**: 
@@ -105,7 +105,7 @@ Before setting up the pipeline, test each notebook manually:
 1. **Run Bronze Notebook** (`nb_bronze_erp_customers`)
    - Click **Run all**
    - Expected output: "Bronze table written: erp_replication.customers_raw"
-   - Verify: Query the table:
+   - Verify: Query the table from the notebook by creating a new code block:
      ```python
      display(spark.table("erp_replication.customers_raw"))
      ```
@@ -113,7 +113,7 @@ Before setting up the pipeline, test each notebook manually:
 2. **Run Silver Notebook** (`nb_silver_erp_customers`)
    - Click **Run all**
    - Expected output: "Silver table written: erp_reporting.customers_curated"
-   - Verify: Query the table:
+   - Verify: Query the table from the notebook by creating a new code block:
      ```python
      display(spark.table("erp_reporting.customers_curated"))
      ```
@@ -121,7 +121,7 @@ Before setting up the pipeline, test each notebook manually:
 3. **Run Gold Notebook** (`nb_gold_customer_marts`)
    - Click **Run all**
    - Expected output: "Gold table written: erp_reporting.customer_country_ageband_mart"
-   - Verify: Query the table:
+   - Verify: Query the table from the notebook by creating a new code block:
      ```python
      display(spark.table("erp_reporting.customer_country_ageband_mart"))
      ```
@@ -176,7 +176,7 @@ Before setting up the pipeline, test each notebook manually:
      - Add dependency: Select `Gold`
 
 5. **Save the pipeline**
-6. Click **Run** to test the full orchestration
+6. Click **Run** to test the full orchestration. This will take a few minutes.
 
 ### Step 6: Verify Results
 
@@ -186,7 +186,7 @@ After the pipeline completes (or after manual runs):
    ```sql
    SELECT * FROM erp_replication.customers_raw;
    ```
-   Should show 6 rows (12 rown if pipeline and manual process were run) with raw customer data plus `_ingest_ts` column
+   Should show 6 rows (12 rows if pipeline and manual process were run) with raw customer data plus `_ingest_ts` column
 
 2. **Check Silver Table**:
    ```sql
@@ -276,7 +276,7 @@ Each source maintains complete isolation and clear lineage.
 **Solution**: This is expected behavior. Lakehouse SQL endpoint does not support `CREATE SCHEMA` SQL statements. Create schemas manually in the Lakehouse UI: right-click on **Schemas** → **New schema**
 
 ### Issue: "File not found" error in Bronze notebook
-**Solution**: Verify the CSV file is uploaded to `Files/raw/customers.csv` in your Lakehouse
+**Solution**: Verify the CSV file is uploaded to `Files/samples/customers.csv` in your Lakehouse
 
 ### Issue: Notebooks can't find tables
 **Solution**: Make sure notebooks are attached to the correct Lakehouse (`lh_sales_core`)

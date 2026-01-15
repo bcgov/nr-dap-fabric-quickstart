@@ -16,7 +16,6 @@ Use this 5‑minute path to pull the notebook into a new, empty workspace and im
    - Provider: GitHub  
    - Repo: `bcgov/nr-dap-azure`  
    - Branch: `fabric-lakehouse-medallion-quickstart`  
-   - Folder: `bootstrap`
 3. **Initial sync**: choose **Git → Workspace** (your workspace is empty).
 4. **Run the notebook** `bootstrap/01_import_files_root` → **Run all**  
    - Creates/attaches Lakehouse **`lh_sales_core`**  
@@ -236,7 +235,6 @@ Use `templates/copy_api.json` with pagination support
 | Issue | Solution |
 |-------|----------|
 | Schema not found | Create schemas manually in Lakehouse UI (right-click Schemas → New schema) |
-| File not found | Upload `samples/customers.csv` to Lakehouse Files |
 | Parameter not recognized | Verify notebooks attached to correct Lakehouse |
 | DQ checks fail | Review Silver data quality, check for nulls/duplicates |
 | Pipeline failure | Check notebook execution logs for detailed errors |
