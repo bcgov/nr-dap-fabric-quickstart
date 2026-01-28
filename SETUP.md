@@ -32,7 +32,8 @@ Use this workflow to connect your Fabric workspace to GitHub and import the Quic
    - **Make sure to copy the GitHub token once created.** It will not be revealed again. Keep it in a text file or password manager.
 
 4. **Fork this GitHub Repository**
-   - Fork this repository to your personal repository in GitHub: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo
+   - Fork the repository to your personal repository in GitHub: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo
+   - The repository: https://github.com/bcgov/nr-dap-fabric-quickstart
 
 5. **Create a new empty Fabric workspace** (or use an existing one)
    - New Fabric workspaces are currently create by the Data Foundations team
@@ -41,7 +42,7 @@ Use this workflow to connect your Fabric workspace to GitHub and import the Quic
 6. **Connect the workspace to GitHub**:
    - Navigate to **Workspace settings → Git integration**
    - Provider: **GitHub**
-   - Repository: `bcgov/nr-dap-azure`
+   - Repository: `bcgov/nr-dap--fabric-quickstart`
    - Branch: `fabric-lakehouse-medallion-quickstart`
 
 7. **Initial sync**:
