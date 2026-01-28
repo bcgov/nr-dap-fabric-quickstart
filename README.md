@@ -14,7 +14,7 @@ Use this 5‑minute path to pull the notebook into a new, empty workspace and im
 2. **Connect the workspace to GitHub**  
    - **Workspace settings → Git integration**  
    - Provider: GitHub  
-   - Repo: `bcgov/nr-dap-azure`  
+   - Repo: `bcgov/nr-dap-fabric-quickstart`  
    - Branch: `fabric-lakehouse-medallion-quickstart`  
 3. **Initial sync**: choose **Git → Workspace** (your workspace is empty).
 4. **Run the notebook** `bootstrap/01_import_files_root` → **Run all**  

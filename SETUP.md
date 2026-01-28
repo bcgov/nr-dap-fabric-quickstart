@@ -42,7 +42,7 @@ Use this workflow to connect your Fabric workspace to GitHub and import the Quic
 6. **Connect the workspace to GitHub**:
    - Navigate to **Workspace settings → Git integration**
    - Provider: **GitHub**
-   - Repository: `bcgov/nr-dap--fabric-quickstart`
+   - Repository: `bcgov/nr-dap-fabric-quickstart`
    - Branch: `fabric-lakehouse-medallion-quickstart`
 
 7. **Initial sync**:
