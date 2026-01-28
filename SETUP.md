@@ -21,20 +21,34 @@ This QuickStart implements a medallion lakehouse architecture with three zones:
 
 Use this workflow to connect your Fabric workspace to GitHub and import the QuickStart files.
 
-1. **Create a new empty Fabric workspace** (or use an existing one)
+1. **Create GitHub Account**
+   - Create a GitHub account if necessary: https://github.com/
 
-2. **Connect the workspace to GitHub**:
-   - Create personal access token on GitHub: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic
+2. **Join BCGOV GitHub Organization**
+   - Using SSO sign in here: https://github.com/bcgov
+
+3. **Create GitHub Token**
+   - Create a personal access token: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic
+   - **Make sure to copy the GitHub token once created.** It will not be revealed again. Keep it in a text file or password manager.
+
+4. **Fork this GitHub Repository**
+   - Fork this repository to your personal repository in GitHub: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo
+
+5. **Create a new empty Fabric workspace** (or use an existing one)
+   - New Fabric workspaces are currently create by the Data Foundations team
+   - Using an existing Fabric workspace is also possible. Isolate the QuickStart in its one folder within the workspace.
+
+6. **Connect the workspace to GitHub**:
    - Navigate to **Workspace settings → Git integration**
    - Provider: **GitHub**
    - Repository: `bcgov/nr-dap-azure`
    - Branch: `fabric-lakehouse-medallion-quickstart`
 
-3. **Initial sync**:
+7. **Initial sync**:
    - Choose **Git → Workspace** (your workspace is empty)
    - This imports the bootstrap notebook
 
-4. **Run the bootstrap notebook**:
+8.  **Run the bootstrap notebook**:
    - Open `bootstrap/01_import_files_root`
    - Click **Run all**
    - The notebook will:
@@ -42,11 +56,11 @@ Use this workflow to connect your Fabric workspace to GitHub and import the Quic
      - Copy all QuickStart files from the branch root to **Lakehouse → Files → `quickstart`**
      - This includes notebooks, sample data, templates, and documentation
 
-5. **Disconnect Git** (recommended):
+9.  **Disconnect Git** (optional):
    - Go to **Workspace settings → Git integration → Disconnect**
    - This prevents accidental commits back to the repo
    - Your workspace items remain intact and ready to use
-
+   - One can keep the connection to see how MS Fabric stores artifacts in GitHub
 
 **Verify**: 
 - Lakehouse `lh_sales_core` exists in your workspace
