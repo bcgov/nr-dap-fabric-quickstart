@@ -23,7 +23,7 @@ import urllib.request, json, os
 
 # ---- Configure your repo ----
 GITHUB_OWNER  = "bcgov"
-GITHUB_REPO   = "nr-dap-azure"
+GITHUB_REPO   = "nr-dap-fabric-quickstart"
 GITHUB_BRANCH = "main"  # branch whose *root* you want to copy
 
 # Optional: GitHub token to avoid rate limits (fine-grained or classic, read-only)

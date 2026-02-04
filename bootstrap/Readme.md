@@ -8,7 +8,7 @@ Use this one-time bootstrap to pull the notebook into a **new, empty** Microsoft
 2. **Connect** the workspace to GitHub  
    - **Workspace settings → Git integration**  
    - Provider: **GitHub**  
-   - Repo: `bcgov/nr-dap-azure`  
+   - Repo: `bcgov/nr-dap-fabric-quickstart`  
    - Branch: `main`  
    - Folder: `bootstrap`
 3. **Initial sync**: choose **Git → Workspace** (the workspace is empty).
