@@ -43,7 +43,7 @@ Use this workflow to connect your Fabric workspace to GitHub and import the Quic
    - Navigate to **Workspace settings → Git integration**
    - Provider: **GitHub**
    - Repository: `bcgov/nr-dap-fabric-quickstart`
-   - Branch: `fabric-lakehouse-medallion-quickstart`
+   - Branch: `main`
 
 7. **Initial sync**:
    - Choose **Git → Workspace** (your workspace is empty)
@@ -53,7 +53,7 @@ Use this workflow to connect your Fabric workspace to GitHub and import the Quic
    - Open `bootstrap/01_import_files_root`
    - Click **Run all**
    - The notebook will:
-     - Create and attach Lakehouse `lh_sales_core`
+     - Create and attach Lakehouse `quickstart_lh`
      - Copy all QuickStart files from the branch root to **Lakehouse → Files → `quickstart`**
      - This includes notebooks, sample data, templates, and documentation
 
@@ -64,7 +64,7 @@ Use this workflow to connect your Fabric workspace to GitHub and import the Quic
    - One can keep the connection to see how MS Fabric stores artifacts in GitHub
 
 **Verify**: 
-- Lakehouse `lh_sales_core` exists in your workspace
+- Lakehouse `quickstart_lh` exists in your workspace
 - Files are visible under **Lakehouse → Files → quickstart** folder
 
 **Note**: If your organization restricts outbound traffic, allow `api.github.com` and `raw.githubusercontent.com` for the one-time import.
@@ -73,7 +73,7 @@ Use this workflow to connect your Fabric workspace to GitHub and import the Quic
 
 Schemas must be created in your Lakehouse before running notebooks. Create them manually using the Lakehouse UI:
 
-1. Open your Lakehouse (`lh_sales_core`)
+1. Open your Lakehouse (`quickstart_lh`)
 2. In the Lakehouse Explorer (left panel), find the **Schemas** section
 3. Right-click on **Schemas** → **New schema**
 4. Create schema: `erp_replication`
@@ -100,16 +100,16 @@ Schemas must be created in your Lakehouse before running notebooks. Create them 
    - Delete the default empty cell
    - Copy the entire contents of the .py file
    - Paste into a new code cell
-   - Make sure to **attach the notebook to your Lakehouse** (`lh_sales_core`):
+   - Make sure to **attach the notebook to your Lakehouse** (`quickstart_lh`):
      - Click **Add** under Lakehouses in the left panel
      - Select **Existing lakehouse**
-     - Choose `lh_sales_core`
+     - Choose `quickstart_lh`
 
 4. **Create Data Quality Notebook**
    - Create another notebook
    - Name it: `nb_dq_checks`
    - Copy contents from `dq/dq_checks.py`
-   - Attach to `lh_sales_core`
+   - Attach to `quickstart_lh`
 
 **Note**: The notebooks are parameterized with a `source` parameter (default: 'erp'). When running from the pipeline, this parameter will be passed automatically.
 
@@ -294,7 +294,7 @@ Each source maintains complete isolation and clear lineage.
 **Solution**: Verify the CSV file is uploaded to `Files/samples/customers.csv` in your Lakehouse
 
 ### Issue: Notebooks can't find tables
-**Solution**: Make sure notebooks are attached to the correct Lakehouse (`lh_sales_core`)
+**Solution**: Make sure notebooks are attached to the correct Lakehouse (`quickstart_lh`)
 
 ### Issue: Data quality checks fail
 **Solution**: Check the Silver table data quality. Common issues:

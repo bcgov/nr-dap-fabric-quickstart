@@ -24,13 +24,13 @@ import urllib.request, json, os
 # ---- Configure your repo ----
 GITHUB_OWNER  = "bcgov"
 GITHUB_REPO   = "nr-dap-azure"
-GITHUB_BRANCH = "fabric-lakehouse-medallion-quickstart"  # branch whose *root* you want to copy
+GITHUB_BRANCH = "main"  # branch whose *root* you want to copy
 
 # Optional: GitHub token to avoid rate limits (fine-grained or classic, read-only)
 GITHUB_TOKEN = None  # e.g., "ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
 # ---- Lakehouse settings ----
-LAKEHOUSE_NAME = "lh_sales_core"
+LAKEHOUSE_NAME = "quickstart_lh"
 LAKEHOUSE_DESC = "Lakehouse for Fabric Medallion Quickstart"
 
 # ---- File filters ----
