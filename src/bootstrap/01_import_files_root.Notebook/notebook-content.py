@@ -38,7 +38,7 @@ GITHUB_BRANCH = "main"
 GITHUB_TOKEN = None  # e.g., "ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
 # ---- Lakehouse settings ----
-LAKEHOUSE_NAME = "quickstart_lh_test"
+LAKEHOUSE_NAME = "quickstart_lh"
 LAKEHOUSE_DESC = "Lakehouse for Fabric Medallion Quickstart"
 
 # ---- File handling & exclusions ----
