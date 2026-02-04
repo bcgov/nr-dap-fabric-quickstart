@@ -21,7 +21,7 @@ if not source:
 replication_schema = f"{source}_replication"
 
 # Paths (adjust as needed)
-raw_path = "/lakehouse/default/Files/raw/customers.csv"
+raw_path = "Files/quickstart/samples/customers.csv"
 
 # Table naming
 bronze_table = f"{replication_schema}.customers_raw"

@@ -6,12 +6,40 @@ This QuickStart provides a ready-to-use implementation of the Medallion (Bronze�
 
 **New to this project?** → Start with **[SETUP.md](SETUP.md)** for detailed step-by-step instructions to get up and running in Fabric.
 
+### Fabric Git Quickstart (connect → sync → run → disconnect)
+
+Use this 5‑minute path to pull the notebook into a new, empty workspace and import the training files.
+
+1. **Create** a new empty Fabric workspace.
+2. **Connect the workspace to GitHub**  
+   - **Workspace settings → Git integration**  
+   - Provider: GitHub  
+   - Repo: `bcgov/nr-dap-fabric-quickstart`  
+   - Branch: `fabric-lakehouse-medallion-quickstart`  
+3. **Initial sync**: choose **Git → Workspace** (your workspace is empty).
+4. **Run the notebook** `bootstrap/01_import_files_root` → **Run all**  
+   - Creates/attaches Lakehouse **`lh_sales_core`**  
+   - Copies **text assets** from the branch root into **Lakehouse → Files → `quickstart`**  
+   - (Binary files are skipped by default; see SETUP for how to enable them.)
+5. **Disconnect Git**  
+   - **Workspace settings → Git integration → Disconnect**  
+   - Prevents accidental commits back to the repo; your items remain in the workspace.
+
+> **Tip:** If your organization restricts outbound traffic, allow `api.github.com` and `raw.githubusercontent.com` for the one‑time import.  
+> **Note:** Lakehouse data (Tables and Files) isn’t tracked in Git; the notebook places assets locally for each learner.
+
 ## Project Structure
 
 ```
 fabric-medallion-quickstart/
 ├── SETUP.md                          # 👈 START HERE - Detailed setup guide
 ├── README.md                         # This file - project overview
+├── .github                           # CODEOWNERS CODEOWNERS and any workflows
+├── bootstrap                         # Fabric‑committed notebook(s) + a lightweight README
+│   ├── 01_import_files_root.Notebook # Fabric representation of the notebook item
+│   │   ├── .platform                 # Fabric generated platform file
+│   │   └── notebook-contents.py      # source (cells + metadata)
+│   └── README.md                     # instructions (connect → sync → run → disconnect)
 ├── docs/                             # Architecture and design documentation
 │   ├── architecture.md               # Architecture decisions and patterns
 │   └── naming-conventions.md         # Naming standards for Fabric items
@@ -91,7 +119,7 @@ The `schemas/` folder contains SQL scripts for schema creation. **These scripts 
 - Column-level security (CLS) and row-level security (RLS) can be implemented
 - SQL-based schema management is preferred
 
-For this Lakehouse QuickStart, schemas are created manually in the Lakehouse UI (see [SETUP.md](SETUP.md) Step 3).
+For this Lakehouse QuickStart, schemas are created manually in the Lakehouse UI (see [SETUP.md](SETUP.md) Step 2).
 
 ## Getting Started
 
@@ -104,49 +132,7 @@ For this Lakehouse QuickStart, schemas are created manually in the Lakehouse UI 
 
 **👉 See [SETUP.md](SETUP.md) for detailed instructions**
 
-Quick summary:
-1. Create Lakehouse: `lh_sales_core`
-2. Upload `samples/customers.csv` to Lakehouse Files
-3. Create schemas manually in Lakehouse UI (right-click Schemas → New schema)
-4. Import notebooks from `notebooks/` and `dq/`
-5. Run notebooks in sequence: Bronze → Silver → Gold → DQ Checks
-6. (Optional) Create orchestration pipeline
-
 **Note**: This QuickStart uses Lakehouse only. Schemas must be created manually in the Lakehouse UI before running notebooks. The SQL scripts in `schemas/` folder are provided for future Warehouse-based implementations.
-
-### Testing the QuickStart
-
-```python
-# 1. Run Bronze - ingest raw data
-# Notebook: notebooks/bronze.py
-# Output: erp_replication.customers_raw
-
-# 2. Run Silver - cleanse and conform
-# Notebook: notebooks/silver.py
-# Output: erp_reporting.customers_curated
-
-# 3. Run Gold - create business marts
-# Notebook: notebooks/gold.py
-# Output: erp_reporting.customer_country_ageband_mart
-
-# 4. Run DQ Checks - validate data quality
-# Notebook: dq/dq_checks.py
-# Output: Validation results
-```
-
-### Verifying Results
-
-```sql
--- Check Bronze (raw data with ingest timestamp)
-SELECT * FROM erp_replication.customers_raw;
-
--- Check Silver (cleaned and typed data)
-SELECT * FROM erp_reporting.customers_curated;
-
--- Check Gold (aggregated metrics)
-SELECT * FROM erp_reporting.customer_country_ageband_mart
-ORDER BY country, age_band;
-```
 
 ## Extending the QuickStart
 
@@ -249,7 +235,6 @@ Use `templates/copy_api.json` with pagination support
 | Issue | Solution |
 |-------|----------|
 | Schema not found | Create schemas manually in Lakehouse UI (right-click Schemas → New schema) |
-| File not found | Upload `samples/customers.csv` to Lakehouse Files |
 | Parameter not recognized | Verify notebooks attached to correct Lakehouse |
 | DQ checks fail | Review Silver data quality, check for nulls/duplicates |
 | Pipeline failure | Check notebook execution logs for detailed errors |
