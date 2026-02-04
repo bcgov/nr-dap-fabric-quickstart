@@ -15,10 +15,10 @@ Use this 5‑minute path to pull the notebook into a new, empty workspace and im
    - **Workspace settings → Git integration**  
    - Provider: GitHub  
    - Repo: `bcgov/nr-dap-fabric-quickstart`  
-   - Branch: `fabric-lakehouse-medallion-quickstart`  
+   - Branch: `main`  
 3. **Initial sync**: choose **Git → Workspace** (your workspace is empty).
 4. **Run the notebook** `bootstrap/01_import_files_root` → **Run all**  
-   - Creates/attaches Lakehouse **`lh_sales_core`**  
+   - Creates/attaches Lakehouse **`quickstart_lh`**  
    - Copies **text assets** from the branch root into **Lakehouse → Files → `quickstart`**  
    - (Binary files are skipped by default; see SETUP for how to enable them.)
 5. **Disconnect Git**  

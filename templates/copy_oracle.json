@@ -37,7 +37,7 @@
             "datasetSettings": {
                 "annotations": [],
                 "connectionSettings": {
-                    "name": "lh_sales_core",
+                    "name": "quickstart_lh",
                     "properties": {
                         "annotations": [],
                         "type": "Lakehouse",

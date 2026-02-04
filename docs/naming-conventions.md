@@ -2,7 +2,7 @@
 
 ## Workspaces & Items
 - Workspaces: `<ministry acronym>_<group/project name>_<environment>` (e.g., `ECS_CTHUB_Prod`, `AF_BRM_NonProd`, `FOR_ADMO_Test`, `FOR_BCTS_Dev`)
-- Lakehouse: `lh_<domain>_<purpose>` (e.g., `lh_sales_core`, `lh_finance_reporting`)
+- Lakehouse: `lh_<domain>_<purpose>` (e.g., `quickstart_lh`, `lh_finance_reporting`)
 - Warehouse: `wh_<domain>_<purpose>` (e.g., `wh_sales_gold`)
 
 ## Schemas

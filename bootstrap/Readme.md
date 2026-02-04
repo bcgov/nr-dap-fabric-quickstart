@@ -9,11 +9,11 @@ Use this one-time bootstrap to pull the notebook into a **new, empty** Microsoft
    - **Workspace settings → Git integration**  
    - Provider: **GitHub**  
    - Repo: `bcgov/nr-dap-azure`  
-   - Branch: `fabric-lakehouse-medallion-quickstart`  
+   - Branch: `main`  
    - Folder: `bootstrap`
 3. **Initial sync**: choose **Git → Workspace** (the workspace is empty).
 4. **Run the notebook** `01_import_files_root` → **Run all**  
-   - Creates/attaches Lakehouse **`lh_sales_core`**  
+   - Creates/attaches Lakehouse **`quickstart_lh`**  
    - Copies branch‑root **text files** into **Lakehouse → Files → `quickstart`**
 5. **Disconnect Git**: **Workspace settings → Git integration → Disconnect**  
    - Prevents commits back to the repo; your items remain in the workspace.
