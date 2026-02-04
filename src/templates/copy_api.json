@@ -1,0 +1,78 @@
+{
+    "name": "api",
+    "type": "Copy",
+    "dependsOn": [],
+    "policy": {
+        "timeout": "0.12:00:00",
+        "retry": 0,
+        "retryIntervalInSeconds": 30,
+        "secureOutput": false,
+        "secureInput": false
+    },
+    "typeProperties": {
+        "source": {
+            "type": "RestSource",
+            "httpRequestTimeout": "00:01:40",
+            "requestInterval": "00.00:00:00.010",
+            "requestMethod": "GET",
+            "paginationRules": {
+                "supportRFC5988": "true"
+            },
+            "datasetSettings": {
+                "annotations": [],
+                "type": "RestResource",
+                "typeProperties": {
+                    "relativeUrl": "api/sales"
+                },
+                "schema": [],
+                "externalReferences": {
+                    "connection": "<YOUR_REST_API_CONNECTION_ID> "
+                }
+            }
+        },
+        "sink": {
+            "type": "LakehouseTableSink",
+            "tableActionOption": "Append",
+            "partitionOption": "None",
+            "applyVOrder": true,
+            "datasetSettings": {
+                "annotations": [],
+                "connectionSettings": {
+                    "name": "quickstart_lh",
+                    "properties": {
+                        "annotations": [],
+                        "type": "Lakehouse",
+                        "typeProperties": {
+                            "workspaceId": "<YOUR_WORKSPACE_ID>",
+                            "artifactId": "<YOUR_LAKEHOUSE_ARTIFACT_ID>",
+                            "rootFolder": "Tables"
+                        },
+                        "externalReferences": {
+                            "connection": "<YOUR_LAKEHOUSE_CONNECTION_ID>"
+                        }
+                    }
+                },
+                "type": "LakehouseTable",
+                "schema": [],
+                "typeProperties": {
+                    "schema": "*_replication",
+                    "table": "*_raw"
+                }
+            }
+        },
+        "enableStaging": false,
+        "translator": {
+            "type": "TabularTranslator",
+            "typeConversion": true,
+            "typeConversionSettings": {
+                "allowDataTruncation": true,
+                "treatBooleanAsNumber": false
+            },
+            "columnFlattenSettings": {
+                "treatArrayAsString": false,
+                "treatStructAsString": false,
+                "flattenColumnDelimiter": "."
+            }
+        }
+    }
+}

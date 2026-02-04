@@ -1,0 +1,81 @@
+{
+    "name": "File",
+    "type": "Copy",
+    "dependsOn": [],
+    "policy": {
+        "timeout": "0.12:00:00",
+        "retry": 0,
+        "retryIntervalInSeconds": 30,
+        "secureOutput": false,
+        "secureInput": false
+    },
+    "typeProperties": {
+        "source": {
+            "type": "DelimitedTextSource",
+            "storeSettings": {
+                "type": "FileServerReadSettings",
+                "recursive": false
+            },
+            "formatSettings": {
+                "type": "DelimitedTextReadSettings"
+            },
+            "datasetSettings": {
+                "annotations": [],
+                "type": "DelimitedText",
+                "typeProperties": {
+                    "location": {
+                        "type": "FileServerLocation",
+                        "fileName": "*.csv"
+                    },
+                    "columnDelimiter": ",",
+                    "escapeChar": "\\",
+                    "firstRowAsHeader": true,
+                    "quoteChar": "\""
+                },
+                "schema": [],
+                "externalReferences": {
+                    "connection": "<YOUR_S3_CONNECTION_ID>"
+                }
+            }
+        },
+        "sink": {
+            "type": "LakehouseTableSink",
+            "tableActionOption": "Append",
+            "partitionOption": "None",
+            "applyVOrder": true,
+            "datasetSettings": {
+                "annotations": [],
+                "connectionSettings": {
+                    "name": "quickstart_lh",
+                    "properties": {
+                        "annotations": [],
+                        "type": "Lakehouse",
+                        "typeProperties": {
+                            "workspaceId": "<YOUR_WORKSPACE_ID>",
+                            "artifactId": "<YOUR_LAKEHOUSE_ARTIFACT_ID>",
+                            "rootFolder": "Tables"
+                        },
+                        "externalReferences": {
+                            "connection": "<YOUR_LAKEHOUSE_CONNECTION_ID>"
+                        }
+                    }
+                },
+                "type": "LakehouseTable",
+                "schema": [],
+                "typeProperties": {
+                    "schema": "*_replication",
+                    "table": "*_raw"
+                }
+            }
+        },
+        "enableStaging": false,
+        "translator": {
+            "type": "TabularTranslator",
+            "typeConversion": true,
+            "typeConversionSettings": {
+                "allowDataTruncation": true,
+                "treatBooleanAsNumber": false
+            }
+        }
+    }
+}

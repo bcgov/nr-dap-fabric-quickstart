@@ -1,0 +1,36 @@
+{
+  "name": "bronze-silver-gold-pipeline",
+  "parameters": {
+    "source": { "type": "string", "defaultValue": "erp" }
+  },
+  "activities": [
+    {
+      "type": "Notebook",
+      "name": "Bronze",
+      "path": "notebooks/bronze.py",
+      "parameters": { "source": "@pipeline().parameters.source" }
+    },
+    {
+      "type": "Notebook",
+      "name": "Silver",
+      "path": "notebooks/silver.py",
+      "parameters": { "source": "@pipeline().parameters.source" },
+      "dependsOn": ["Bronze"]
+    },
+    {
+      "type": "Notebook",
+      "name": "Gold",
+      "path": "notebooks/gold.py",
+      "parameters": { "source": "@pipeline().parameters.source" },
+      "dependsOn": ["Silver"]
+    },
+    {
+      "type": "Notebook",
+      "name": "DQ Checks",
+      "path": "dq/dq_checks.py",
+      "parameters": { "source": "@pipeline().parameters.source" },
+      "dependsOn": ["Gold"]
+    }
+  ],
+  "schedule": { "frequency": "Daily", "time": "02:00" }
+}
